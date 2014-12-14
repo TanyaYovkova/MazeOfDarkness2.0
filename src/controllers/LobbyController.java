@@ -21,15 +21,12 @@ import player.Player;
 import player.User;
 
 @Controller
-// @SessionAttributes("user")
 public class LobbyController {
-	private static final Lobby LOBBY = new Lobby();
-
+	private static final Lobby LOBBY = Lobby.getLobby();
 	@RequestMapping(value = "/Lobby", method = RequestMethod.GET)
 	public String handleLobby(ModelMap model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		LOBBY.addUser((String) session.getAttribute("username"), session);
-		session.setAttribute("lobby", LOBBY);
 		session.setAttribute("playing", false);
 		session.setAttribute("rejectionMSG", null);
 		session.setAttribute("rejection", null);
@@ -44,9 +41,8 @@ public class LobbyController {
 			throws IOException {
 
 		HttpSession session = request.getSession();
-		Lobby lobby = (Lobby) session.getAttribute("lobby");
-		HttpSession sessionOpponent = lobby.getSession(onlineUsers);
-						
+
+		HttpSession sessionOpponent = LOBBY.getSession(onlineUsers);
 		sessionOpponent.setAttribute("playWith",
 				session.getAttribute("username"));
 		
@@ -56,9 +52,11 @@ public class LobbyController {
 		session.setAttribute("opponent",
 				sessionOpponent.getAttribute("username"));
 		
+		sessionOpponent.setAttribute("opponentsLimit", 0);
+
 		session.setAttribute("opponentsLimit", 0);
+		
 		return "redirect: waitAnswer";
-		//return "LobbyRoom";
 	}
 
 	@RequestMapping(value = "/userChoice", method = RequestMethod.GET)
@@ -67,8 +65,8 @@ public class LobbyController {
 			ModelMap map) throws IOException {
 
 		HttpSession session = request.getSession();
-		Lobby lobby = (Lobby) session.getAttribute("lobby");
-		HttpSession sessionOpponent = lobby.getSession((String)session.getAttribute("opponent"));
+		HttpSession sessionOpponent = LOBBY.getSession((String)session.getAttribute("opponent"));
+
 		if (choice.equals("play")) {
 			Player p1 = new FightPlayer((String)session.getAttribute("username"));
 			Player p2 = new FightPlayer((String)sessionOpponent.getAttribute("username"));;
@@ -108,7 +106,7 @@ public class LobbyController {
 	}
 
 	@RequestMapping(value = "/waitAnswer", method = RequestMethod.GET)
-	public String waitAnswer(HttpSession session){
+	public String waitAnswer(HttpSession session){		
 		return "LobbyRoom";
 	}
 }
