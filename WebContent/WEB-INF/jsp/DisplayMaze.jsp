@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="images/jpg; charset=ISO-8859-1">
-<meta http-equiv="refresh" content="2">
+<!-- <meta http-equiv="refresh" content="2"> -->
 <title>Insert title here</title>
 </head>
 <body>

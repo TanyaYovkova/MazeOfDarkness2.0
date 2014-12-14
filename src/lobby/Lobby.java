@@ -1,6 +1,5 @@
 package lobby;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -10,6 +9,7 @@ public class Lobby {
 	
 	public HashMap<String, HttpSession> getOnlineUsers() {
 		return onlineUsers;
+		
 	}
 
 
@@ -36,5 +36,8 @@ public class Lobby {
 			return getOnlineUsers().get(user);
 		
 	}
+	
+	
+	
 	
 }
